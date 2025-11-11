@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agendamento de Coleta</title>
+  <style>
+    :root {
+      /* 🎨 Paleta de cores */
+      --verde-primario: #22c55e;
+      --azul-primario: #2563eb;
+      --laranja-secundario: #f97316;
+      --amarelo-secundario: #facc15;
+      --cor-fundo: #f1f5f9;
+      --cor-texto: #1e293b;
+      --cor-erro: #dc2626;
+    }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: var(--cor-fundo);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      color: var(--cor-texto);
+    }
+
+    .card {
+      background: white;
+      padding: 24px;
+      border-radius: 18px;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      width: 340px;
+      transition: transform 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    h2 {
+      color: var(--azul-primario);
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: block;
+      text-align: left;
+      font-weight: bold;
+      margin-top: 10px;
+      color: var(--azul-primario);
+    }
+
+    input[type="date"],
+    input[type="time"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      font-size: 15px;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+      color: white;
+      cursor: pointer;
+      transition: 0.3s ease;
+      margin-top: 6px;
+    }
+
+    #btnData {
+      background: linear-gradient(90deg, var(--verde-primario), var(--azul-primario));
+    }
+
+    #btnHora {
+      background: linear-gradient(90deg, var(--azul-primario), var(--verde-primario));
+    }
+
+    #btnAgendar {
+      background: linear-gradient(90deg, var(--verde-primario), var(--azul-primario));
+      margin-top: 14px;
+    }
+
+    #btnCancelar {
+      background: linear-gradient(90deg, var(--laranja-secundario), var(--amarelo-secundario));
+      color: #1e293b;
+      font-weight: bold;
+    }
+
+    .btn:hover {
+      filter: brightness(1.1);
+    }
+
+    #mensagem {
+      margin-top: 15px;
+      font-weight: bold;
+      color: var(--azul-primario);
+      min-height: 22px;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>Agendar Coleta de Lixo</h2>
+
+    <label for="data">Escolha a Data:</label>
+    <input type="date" id="data">
+    <button id="btnData" class="btn" onclick="salvarData()">Salvar Data</button>
+
+    <label for="hora">Escolha o Horário:</label>
+    <input type="time" id="hora">
+    <button id="btnHora" class="btn" onclick="salvarHora()">Salvar Horário</button>
+
+    <button id="btnAgendar" class="btn" onclick="agendar()">Confirmar Agendamento</button>
+    <button id="btnCancelar" class="btn" onclick="cancelar()">Cancelar Agendamento</button>
+
+    <p id="mensagem"></p>
+  </div>
+
+  <script>
+    let dataSelecionada = localStorage.getItem('dataColeta') || '';
+    let horaSelecionada = localStorage.getItem('horaColeta') || '';
+
+    function salvarData() {
+      const data = document.getElementById('data').value;
+      const msg = document.getElementById('mensagem');
+      if (!data) {
+        msg.textContent = "⚠️ Selecione uma data válida.";
+        msg.style.color = "var(--cor-erro)";
+        return;
+      }
+      localStorage.setItem('dataColeta', data);
+      dataSelecionada = data;
+      msg.textContent = `📅 Data salva: ${new Date(data).toLocaleDateString('pt-BR')}`;
+      msg.style.color = "var(--verde-primario)";
+    }
+
+    function salvarHora() {
+      const hora = document.getElementById('hora').value;
+      const msg = document.getElementById('mensagem');
+      if (!hora) {
+        msg.textContent = "⚠️ Selecione um horário válido.";
+        msg.style.color = "var(--cor-erro)";
+        return;
+      }
+      localStorage.setItem('horaColeta', hora);
+      horaSelecionada = hora;
+      msg.textContent = `🕒 Horário salvo: ${hora}`;
+      msg.style.color = "var(--azul-primario)";
+    }
+
+    function agendar() {
+      const msg = document.getElementById('mensagem');
+      if (!dataSelecionada || !horaSelecionada) {
+        msg.textContent = "⚠️ Salve a data e o horário antes de confirmar.";
+        msg.style.color = "var(--cor-erro)";
+        return;
+      }
+      const dataHora = `${dataSelecionada}T${horaSelecionada}`;
+      localStorage.setItem('agendamentoColeta', dataHora);
+      msg.textContent = `✅ Coleta agendada para: ${new Date(dataHora).toLocaleString('pt-BR')}`;
+      msg.style.color = "var(--azul-primario)";
+    }
+
+    function cancelar() {
+      localStorage.removeItem('agendamentoColeta');
+      localStorage.removeItem('dataColeta');
+      localStorage.removeItem('horaColeta');
+      document.getElementById('mensagem').textContent = "❌ Agendamento cancelado.";
+      document.getElementById('mensagem').style.color = "var(--laranja-secundario)";
+    }
+
+    window.onload = function() {
+      const dataSalva = localStorage.getItem('dataColeta');
+      const horaSalva = localStorage.getItem('horaColeta');
+      const agendamentoSalvo = localStorage.getItem('agendamentoColeta');
+      const msg = document.getElementById('mensagem');
+
+      if (dataSalva) document.getElementById('data').value = dataSalva;
+      if (horaSalva) document.getElementById('hora').value = horaSalva;
+
+      if (agendamentoSalvo) {
+        const dataFormatada = new Date(agendamentoSalvo).toLocaleString('pt-BR');
+        msg.textContent = `📦 Coleta já agendada para: ${dataFormatada}`;
+      }
+    }
+  </script>
+</body>
+</html>

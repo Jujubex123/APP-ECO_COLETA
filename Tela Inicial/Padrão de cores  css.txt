@@ -1,0 +1,98 @@
+:root {
+  --azul: #007BFF;     /* primária */
+  --verde: #28A745;    /* primária */
+  --laranja: #FFA500;  /* secundária */
+  --amarelo: #FFD700;  /* secundária */
+  --fundo: #f5f5f5;
+  --texto: #333;
+  --branco: #fff;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+/* Cabeçalho */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--azul);
+  color: var(--branco);
+  padding: 15px;
+}
+
+#menuBtn {
+  background-color: var(--laranja);
+  color: var(--branco);
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#menuBtn:hover {
+  background-color: var(--amarelo);
+  color: var(--texto);
+}
+
+/* Corpo */
+main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+  background-color: var(--fundo);
+}
+
+/* Container de login/cadastro */
+.login-container {
+  background-color: var(--branco);
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  width: 300px;
+  text-align: center;
+}
+
+.login-container input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid var(--azul);
+  border-radius: 5px;
+}
+
+#loginBtn, #cadastroBtn {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  color: var(--branco);
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+/* Botão de login */
+#loginBtn {
+  background-color: var(--verde);
+}
+
+#loginBtn:hover {
+  background-color: var(--laranja);
+}
+
+/* Botão de cadastro (secundário) */
+#cadastroBtn {
+  background-color: var(--amarelo);
+  color: var(--texto);
+}
+
+#cadastroBtn:hover {
+  background-color: var(--laranja);
+  color: var(--branco);
+}

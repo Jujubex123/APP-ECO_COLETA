@@ -1,0 +1,202 @@
+﻿import React, { useState } from "react";
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Animated } from "react-native";
+import { Feather, FontAwesome5, MaterialCommunityIcons } from "@expo/vector-icons";
+
+export default function EducacaoAmbientalScreen() {
+  const [showQuiz, setShowQuiz] = useState(false);
+
+  return (
+    <ScrollView style={styles.container}>
+      <Text style={styles.title}>Educação Ambiental 🌿</Text>
+
+      <View style={styles.card}>
+        <View style={styles.iconContainer}>
+          <FontAwesome5 name="recycle" size={28} color="#2E7D32" />
+        </View>
+        <Text style={styles.subtitle}>Reciclar é mais fácil do que parece!</Text>
+        <Text style={styles.text}>
+          Separe o lixo orgânico do reciclável e procure pontos de coleta seletiva na sua região.
+        </Text>
+      </View>
+
+      <View style={[styles.card, { backgroundColor: "#E3F2FD" }]}>
+        <View style={styles.iconContainer}>
+          <Feather name="droplet" size={28} color="#0288D1" />
+        </View>
+        <Text style={[styles.subtitle, { color: "#01579B" }]}>Economize Água</Text>
+        <Text style={styles.text}>
+          Feche a torneira enquanto escova os dentes e use balde para lavar o carro. Cada gota conta!
+        </Text>
+      </View>
+
+      <View style={[styles.card, { backgroundColor: "#FFF3E0" }]}>
+        <View style={styles.iconContainer}>
+          <MaterialCommunityIcons name="lightbulb-on-outline" size={28} color="#FB8C00" />
+        </View>
+        <Text style={[styles.subtitle, { color: "#E65100" }]}>Reduza o Consumo de Energia</Text>
+        <Text style={styles.text}>
+          Dê preferência a lâmpadas LED e desligue aparelhos da tomada quando não estiver usando.
+        </Text>
+      </View>
+
+      <View style={[styles.card, { backgroundColor: "#FFFDE7" }]}>
+        <View style={styles.iconContainer}>
+          <FontAwesome5 name="tree" size={28} color="#9E9D24" />
+        </View>
+        <Text style={[styles.subtitle, { color: "#827717" }]}>Cuide da Natureza</Text>
+        <Text style={styles.text}>
+          Plante árvores, participe de mutirões e incentive seus amigos a praticar ações sustentáveis.
+        </Text>
+      </View>
+
+      <TouchableOpacity style={styles.button} onPress={() => setShowQuiz(!showQuiz)}>
+        <Text style={styles.buttonText}>{showQuiz ? "Fechar Quiz ❌" : "Fazer Quiz ♻️"}</Text>
+      </TouchableOpacity>
+
+      {showQuiz && <Quiz />}
+    </ScrollView>
+  );
+}
+
+function Quiz() {
+  const perguntas = [
+    {
+      q: "🧃 Qual é o tempo médio de decomposição do plástico?",
+      a: ["1 ano", "50 anos", "Mais de 400 anos"],
+      correta: 2,
+    },
+    {
+      q: "♻️ Qual destes materiais é reciclável?",
+      a: ["Papel", "Pilhas usadas", "Restos de comida"],
+      correta: 0,
+    },
+    {
+      q: "🌎 O que significa o símbolo ♻️?",
+      a: ["Reutilizar", "Reciclar", "Reduzir"],
+      correta: 1,
+    },
+    {
+      q: "🚯 Onde descartar óleo de cozinha usado?",
+      a: ["Na pia", "No lixo comum", "Em pontos de coleta específicos"],
+      correta: 2,
+    },
+  ];
+
+  const [index, setIndex] = useState(0);
+  const [pontos, setPontos] = useState(0);
+  const [anim] = useState(new Animated.Value(0));
+
+  const responder = (i) => {
+    const acerto = i === perguntas[index].correta;
+    if (acerto) setPontos(pontos + 1);
+
+    // animação de resposta
+    Animated.sequence([
+      Animated.timing(anim, { toValue: 1, duration: 300, useNativeDriver: true }),
+      Animated.timing(anim, { toValue: 0, duration: 300, useNativeDriver: true }),
+    ]).start();
+
+    if (index < perguntas.length - 1) {
+      setTimeout(() => setIndex(index + 1), 400);
+    } else {
+      setTimeout(() => {
+        alert(`🎉 Você acertou ${pontos + (acerto ? 1 : 0)} de ${perguntas.length}!`);
+        setIndex(0);
+        setPontos(0);
+      }, 400);
+    }
+  };
+
+  return (
+    <Animated.View
+      style={[
+        styles.quiz,
+        {
+          transform: [
+            {
+              scale: anim.interpolate({
+                inputRange: [0, 1],
+                outputRange: [1, 1.05],
+              }),
+            },
+          ],
+        },
+      ]}
+    >
+      <Text style={styles.quizText}>{perguntas[index].q}</Text>
+      {perguntas[index].a.map((resp, i) => (
+        <TouchableOpacity key={i} style={styles.option} onPress={() => responder(i)}>
+          <Text style={styles.optionText}>{resp}</Text>
+        </TouchableOpacity>
+      ))}
+      <Text style={styles.progress}>
+        Pergunta {index + 1} de {perguntas.length}
+      </Text>
+    </Animated.View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: { flex: 1, backgroundColor: "#E8F5E9", padding: 16 },
+  title: {
+    fontSize: 26,
+    fontWeight: "bold",
+    color: "#1B5E20",
+    marginBottom: 16,
+    textAlign: "center",
+  },
+  card: {
+    backgroundColor: "#C8E6C9",
+    borderRadius: 16,
+    padding: 14,
+    marginBottom: 14,
+    shadowColor: "#000",
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  iconContainer: { marginBottom: 8 },
+  subtitle: { fontSize: 18, fontWeight: "bold", color: "#2E7D32", marginBottom: 4 },
+  text: { fontSize: 16, color: "#333" },
+  button: {
+    backgroundColor: "#4CAF50",
+    padding: 14,
+    borderRadius: 12,
+    alignItems: "center",
+    marginTop: 10,
+    shadowColor: "#000",
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 4,
+  },
+  buttonText: { color: "white", fontSize: 18, fontWeight: "bold" },
+  quiz: {
+    backgroundColor: "#FFFDE7",
+    marginTop: 20,
+    padding: 16,
+    borderRadius: 12,
+    shadowColor: "#000",
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  quizText: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#33691E",
+    marginBottom: 12,
+  },
+  option: {
+    backgroundColor: "#FFEB3B",
+    padding: 10,
+    borderRadius: 8,
+    marginVertical: 5,
+  },
+  optionText: { fontSize: 16, color: "#444", textAlign: "center" },
+  progress: {
+    marginTop: 10,
+    textAlign: "center",
+    color: "#558B2F",
+    fontWeight: "bold",
+  },
+});

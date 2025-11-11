@@ -1,0 +1,6 @@
+﻿/meuAppColeta
+ ├── App.js
+ ├── screens/
+ │    ├── LoginScreen.js
+ │    └── MenuScreen.js
+ ├── package.json

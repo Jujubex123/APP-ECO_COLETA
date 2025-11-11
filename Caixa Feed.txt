@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Feedback do Usuário</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f2fdf2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+
+  h2 {
+    color: #2b7a2b;
+  }
+
+  textarea {
+    width: 300px;
+    height: 100px;
+    padding: 10px;
+    border: 2px solid #2b7a2b;
+    border-radius: 10px;
+    resize: none;
+    font-size: 14px;
+  }
+
+  button {
+    background-color: #2b7a2b;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin-top: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+
+  button:hover {
+    background-color: #3ea33e;
+  }
+
+  .mensagem {
+    margin-top: 15px;
+<!--     color:  #0066cc;
+
+    font-weight: bold;
+  }
+</style>
+</head>
+<body>
+
+  <h2>Deixe seu Feedback</h2>
+  <textarea id="feedback" placeholder="Digite seu feedback aqui..."></textarea><br>
+  <button onclick="enviarFeedback()">Enviar Feedback</button>
+  <p class="mensagem" id="mensagem"></p>
+
+  <script>
+    function enviarFeedback() {
+      const texto = document.getElementById('feedback').value.trim();
+      const mensagem = document.getElementById('mensagem');
+
+      if (texto === "") {
+        mensagem.textContent = "⚠️ Por favor, escreva algo antes de enviar.";
+        mensagem.style.color = "orange";
+      } else {
+        mensagem.textContent = "✅ Obrigado pelo seu feedback!";
+        mensagem.style.color = "#2b7a2b";
+        document.getElementById('feedback').value = "";
+      }
+    }
+  </script>
+
+</body>
+</html>
